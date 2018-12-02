@@ -22,12 +22,13 @@ namespace Library
             User user3 = new User("Maria", "maria@something.com");
             User user4 = new User("Mitsos", "mitsos@something.com");
 
-            // Ας προσθέσουμε αυτούς τους χρήστες στην βιβλιοθήκη μέσω της αντίστοιχης μεθόδου. 
+            // Ας προσθέσουμε αυτούς τους χρήστες στην βιβλιοθήκη χρησιμοποιώντας το Property Users, και 
+            // εφόσον αυτό είναι λίστα, χρησιμοποιώ την μέθοδο Add της λίστας που προσθέτει το αντικείμενο. 
+            aegeanLibrary.Users.Add(user1);
+            aegeanLibrary.Users.Add(user2);
+            aegeanLibrary.Users.Add(user3);
+            aegeanLibrary.Users.Add(user4);
 
-            aegeanLibrary.AddUser(user1);
-            aegeanLibrary.AddUser(user2);
-            aegeanLibrary.AddUser(user3);
-            aegeanLibrary.AddUser(user4);
 
 
             // Ας φτιάξουμε μερικά Items (Books)
@@ -41,17 +42,19 @@ namespace Library
             Book book7 = new Book("C# for Programmers", "Deitel & Deitel");
             Book book8 = new Book("The Art of Computer Programming", "Donald Knuth");
 
-            aegeanLibrary.AddItem(book1);
-            aegeanLibrary.AddItem(book2);
-            aegeanLibrary.AddItem(book3);
-            aegeanLibrary.AddItem(book4);
-            aegeanLibrary.AddItem(book5);
-            aegeanLibrary.AddItem(book6);
-            aegeanLibrary.AddItem(book7);
-            aegeanLibrary.AddItem(book8);
+            // Περνάω τα Items (Books) μέσα στη λίστα Items. 
+            aegeanLibrary.Items.Add(book1);
+            aegeanLibrary.Items.Add(book2);
+            aegeanLibrary.Items.Add(book3);
+            aegeanLibrary.Items.Add(book4);
+            aegeanLibrary.Items.Add(book5);
+            aegeanLibrary.Items.Add(book6);
+            aegeanLibrary.Items.Add(book7);
+            aegeanLibrary.Items.Add(book8);
 
 
-            // Let's create some Items (Videos)
+
+            // Φτιάχνω Video και τα περνάω στην λίστα με τα Items. 
 
             Video video1 = new Video("Queen - Live 8", 24);
             Video video2 = new Video("Pink Floyd: Live at Pompeii", 64);
@@ -60,12 +63,13 @@ namespace Library
             Video video5 = new Video("The Godfather", 170);
             Video video6 = new Video("American Beauty", 122);
 
-            aegeanLibrary.AddItem(video1);
-            aegeanLibrary.AddItem(video2);
-            aegeanLibrary.AddItem(video3);
-            aegeanLibrary.AddItem(video4);
-            aegeanLibrary.AddItem(video5);
-            aegeanLibrary.AddItem(video6);
+            aegeanLibrary.Items.Add(video1);
+            aegeanLibrary.Items.Add(video2);
+            aegeanLibrary.Items.Add(video3);
+            aegeanLibrary.Items.Add(video4);
+            aegeanLibrary.Items.Add(video5);
+            aegeanLibrary.Items.Add(video6);
+
 
             // Let's create some Journals
 
@@ -76,6 +80,10 @@ namespace Library
             Journal journal5 = new Journal("Cultural Heritage", "DPSD");
             Journal journal6 = new Journal("Interactive Systems", "DPSD");
 
+
+            // Προσοχή - για τα journals χρησιμοποιώ μια μέθοδο, και δεν κάνω σκέτο .Add .. 
+            // ΤΟ ΑΠΟΤΕΛΕΣΜΑ ΕΙΝΑΙ ΤΟ ΙΔΙΟ - το κάνω απλώς σαν παράδειγμα.  Διαβάστε τα σχόλια στην 
+            // μέθοδο AddItem της κλάσης Library.
             aegeanLibrary.AddItem(journal1);
             aegeanLibrary.AddItem(journal2);
             aegeanLibrary.AddItem(journal3);
@@ -170,6 +178,18 @@ namespace Library
 
             Console.WriteLine();
             aegeanLibrary.ShowAllItems4();
+
+
+            // OK ... ας προσθέσω ένα-δυο ακόμα late loans (δηλαδή με παλιές ημερομηνίες) για να χρησιμοποιήσω και την 
+            // μέθοδο που τυπώνει τα πρόστιμα ... 
+
+
+            // Ο χρήστης user3 (Maria) είχε πάρει το video5 από τις 20 Οκτωβρίου του 2018 ...  Τα βίντεο θεωρούνται late
+            // μετά από μόλις μια εβδομάδα.. Το πρόστιμο θα είναι μεγάλο!
+            aegeanLibrary.LoanItem(user3, video5, new DateTime(2018, 10, 20));
+
+            Console.WriteLine();
+            aegeanLibrary.ShowOverdueLoans();
         }
 
     }

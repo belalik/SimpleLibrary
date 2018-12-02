@@ -23,25 +23,25 @@ namespace Library
 class Library
     {
 
-        //public List<Book> Books { get; set; }
-
-        //public List<Video> Videos { get; set; }
-
-        //public List<Journal> Journals { get; set; }
-
         // Property που καθορίζει μέχρι πόσα Items μπορεί να δανείστεί ένας χρήστης (παίρνει τιμή στον constructor). 
-       
-
         public int MaxNumberOfLoans { get; set; }
 
+        // Λίστα που θα κρατάει όλους τους χρήστες της βιβλιοθήκης (αντικείμενα της κλάσης User). 
         public List<User> Users { get; set; }
+
+        // Λίστα που θα κρατάει όλα τα Items
         public List<Item> Items { get; set; }
         
+        // Λίστα που θα κρατάει όλα τα Loans
         public List<Loan> Loans { get; set; }
 
         /*
          *  Ακολουθεί ο κώδικας του Constructor του Library - με άλλα λόγια, ο κώδικας που θα τρέξει μόλις
-         *  δημιουργήσω ένα αντικείμενο της κλάσης Library. 
+         *  δημιουργήσω ένα αντικείμενο της κλάσης Library.  Δέχεται μια παράμετρο int που καθορίζει τον μέγιστο 
+         *  αριθμό από Items που μπορεί να δανειστεί ένας χρήστης.. 
+         *  
+         *  *** Σημείωση για μένα - Να πούμε στο εργαστήριο για re-usability (πχ το numOfLoans ως παράμετρο, και όχι καρφωτό), 
+         *  και για τον κίνδυνο Null Pointers και την προσοχή που χρειάζονται στις λίστες.. Γι 'αυτό τις αρχικοποιώ παρακάτω.. 
          */
         public Library(int maxNumberOfLoans)
         {
@@ -57,16 +57,28 @@ class Library
             MaxNumberOfLoans = maxNumberOfLoans;
         }
 
-
+        /*
+         *  Αυτή η μέθοδος ΧΡΗΣΙΜΟΠΟΙΕΙΤΑΙ ΜΟΝΟ ΣΤΗΝ ΕΙΣΑΓΩΓΗ JOURNAL ... Επίτηδες, και απλώς σαν παράδειγμα. 
+         *  
+         *  Είναι ένας διαφορετικός τρόπος να προσθέσω ένα αντικείμενο στη λίστα
+         *  ίσως στα πλαίσια του 'encapsulation' να μπορεί να πει κανείς πως είναι πιο 
+         *  σαφές να το κάνω έτσι - δηλαδή η βιβλιοθήκη είναι υπεύθυνη, αυτή "ξέρει" πως να προσθέτει 
+         *  αντικείμενα ... Θα μπορούσα πχ να κάνω έναν έλεγχο αν υπάρχει ήδη το αντικείμενο και τότε 
+         *  να μην το προσθέτω, αυτός ο έλεγχος θα έπρεπε να γίνεται εδώ.. 
+         */
         public void AddItem(Item item)
         {
             Items.Add(item);
         }
 
+
+        // Αντίστοιχη μέθοδος ΠΟΥ ΔΕΝ ΧΡΗΣΙΜΟΠΟΕΙΤΑΙ - αλλά θα μπορούσε να αναλαμβάνει αυτή την προσθήκη κάθε νέου χρήστη. 
+        // Θα ήταν χρήσιμη αν είχα ελέγχους, πχ όνομα χρήστη όχι μεγαλύτερο από 12 χαρακτήρες, ή να μην έχει κενά κλπ κλπ ... 
         public void AddUser(User user)
         {
             Users.Add(user);
         }
+        
 
         /*
          *  Μέθοδος LoanItem που είναι υπεύθυνη να κάνει τον δανεισμό.  Δέχεται τρεις παραμέτρους - 
@@ -222,6 +234,8 @@ class Library
          * Αυτό θα μπορούσε να γίνει με πολλούς άλλους τρόπους (πχ αν μιλήσουμε για casting στο εργαστήριο) - 
          * βάζω αυτόν απλά για να δείτε πως υπάρχουν πάρα πολλές έτοιμες μέθοδοι στην C# που μας διευκολύνουν, 
          * αρκεί να ξέρουμε πως να τις χρησιμοποιήσουμε ... 
+         * 
+         * Επίσης, χρησιμοποιώ το '\' για να τυπώσω '"' ... αυτό λέγεται 'escape character' ... Θα το δούμε στο εργαστήριο ... 
          */
         public void ShowAllItems4()
         {
@@ -248,6 +262,113 @@ class Library
             {
                 Console.WriteLine("JOURNAL - ID: [" + j.ItemID + "], \"" + j.Title + "\"" + " published by:  " + j.Publisher + " --- " + (j.OnLoan ? "On LOAN" : "AVAILABLE"));
             }
+        }
+
+        // Μέθοδος που θα τυπώσει όλα τα loans που έχουν καθυστερήσει, και το πρόστιμο για το κάθε ένα. 
+        // Χρησιμοποιεί μια private μέθοδο PrettyPrint που αναλαμβάνει το τύπωμα.. 
+
+        // ΓΕΝΙΚΩΣ ΠΡΟΣΠΑΘΩ ΝΑ ΑΚΟΛΟΥΘΩ ΕΝΑ ΑΞΙΩΜΑ - ΚΑΘΕ ΜΕΘΟΔΟΣ ΠΡΕΠΕΙ ΝΑ ΚΑΝΕΙ ΕΝΑ ΚΑΙ ΜΟΝΟ, ΣΑΦΕΣ, ΠΡΑΓΜΑ. 
+        // ΑΠΟΦΕΥΓΩ ΟΣΟ ΜΠΟΡΩ ΟΙ ΜΕΘΟΔΟΙ ΜΟΥ ΝΑ ΚΑΝΟΥΝ ΠΑΡΑΠΑΝΩ ΠΡΑΓΜΑΤΑ - ΓΙΑΤΙ ΓΙΝΟΝΤΑΙ ΠΙΟ ΠΟΛΥΠΛΟΚΕΣ ΚΑΙ ΣΥΝΕΠΩΣ
+        // ΠΙΟ ΔΥΣΚΟΛΕΣ ΣΕ ΕΝΤΟΠΙΣΜΟ ΛΑΘΩΝ ΚΑΙ ΣΥΝΤΗΡΗΣΗ.
+        public void ShowOverdueLoans()
+        {
+            Console.WriteLine();
+            Console.WriteLine("*** PRINTING LATE LOANS ***");
+            
+            
+            foreach (Loan loan in Loans)
+            {
+                    
+                // Υπολογίζω πόσες μέρες έχουν περάσει από σήμερα (DateTime.Now) μέχρι την ημερομηνία δανεισμού.  Γυρνάει ένα int - πχ 5 μέρες καθυστέρηση. 
+                // ΑΥΤΟ ΧΡΕΙΑΖΕΤΑΙ ΕΞΗΓΗΣΗ ΣΤΟ ΕΡΓΑΣΤΗΡΙΟ - ΣΗΜΕΙΩΣΗ ΓΙΑ ΜΕΝΑ: το cast truncates, to Convert.ToInt θα έκανε στρογγυλοποίηση (round). 
+                int days = (int)(DateTime.Now - loan.DateLoaned).TotalDays;
+
+                // Αν το Item είναι βιβλιο (Book) τότε η καθυστέρηση μετράει από 28 μέρες και πάνω
+                if (loan.ItemLoaned.GetType() == typeof(Book))
+                {
+                    if (days > 28)
+                    {
+                        // Κάλεσε την μέθοδο PrettyPrintLateLoan - αυτή είναι υπεύθυνη να τυπώσει το μήνυμα ... 
+                        PrettyPrintLateLoan(loan, days - 28);
+                    }
+
+                }
+
+                // Αν το Item είναι Journal τότε η καθυστέρηση μετράει από 14 μέρες και πάνω
+                if (loan.ItemLoaned.GetType() == typeof(Journal))
+                {
+                    if (days > 14)
+                    {
+                        PrettyPrintLateLoan(loan, days - 14);
+                    }
+
+                }
+
+                // Αν το Item είναι Video τότε η καθυστέρηση μετράει από 7 μέρες και πάνω
+                if (loan.ItemLoaned.GetType() == typeof(Video))
+                {
+                    if (days > 7)
+                    {
+                        PrettyPrintLateLoan(loan, days - 7);
+
+                    }
+
+                }
+                
+            }
+                
+            
+        }
+
+        /*
+         * Μέθοδος που τυπώνει το μήνυμα για τα αργοπορημένα Loans.  
+         * 
+         * Με την σειρά της, καλεί την εσωτερική (private) μέθοδο CalculateFine ..  Όπως εξήγησα και στα σχόλια της μεθόδου
+         * ShowOverdueLoans, προσπαθώ Η ΚΑΘΕ ΜΕΘΟΔΟΣ ΝΑ ΚΑΝΕΙ ΕΝΑ ΚΑΙ ΜΟΝΟ ΠΡΑΓΜΑ, όσο μπορώ πιο σαφές.  Έτσι το πρόγραμμά μου 
+         * έχει μικρές και κατανοητές μεθόδους που μπορούν να συντηρηθούν πιο εύκολα.  Αν όλα τα έκανα σε μια μέθοδο, θα ήταν 
+         * πιο μεγάλη και πιο πολύπλοκη. 
+         */
+        private void PrettyPrintLateLoan(Loan l, int days)
+        {
+            // απλώς μια κενή γραμμή για αισθητικούς λόγους..
+            Console.WriteLine(); 
+
+            Console.WriteLine(l.ItemLoaned.Title + " ID="+l.ItemLoaned.ItemID+" borrowed by "+l.UserLoaning.Name+" on "+l.DateLoaned.ToShortDateString());
+            Console.ForegroundColor = ConsoleColor.Red;
+
+            // εδώ καλεί την CalculateFine, περνώντας το loan σαν παράμετρο
+            Console.WriteLine("is "+days+ " days late, and the fine today ("+DateTime.Now.ToShortDateString()+") is "+CalculateFine(l)+ " euros."  );
+            Console.ResetColor();
+            
+
+        }
+
+        /*
+         *  Εσωτερική (private) μέθοδος που παίρνει το loan, υπολογίζει το πρόστιμο, και το γυρνάει σε τιμή int.  Δεν κάνει τίποτα άλλο .. 
+         *  
+         *  Σύμφωνα με την εκφώνηση, τα Books θεωρούνται late μετά από 4 εβδομάδες (28 μέρες) και το πρόστιμο είναι 1 ευρώ την κάθε μέρα. 
+         *  Τα Journals θεωρούνται late μετά από δυο εβδομάδες (14 μέρες) και το πρόστιμο είναι 3 ευρώ την ημέρα. 
+         *  Τα Videos θεωρούνται late μετά από μια εβδομάδα, και το πρόστιμο είναι 5 ευρώ την ημέρα. 
+         *  
+         */
+        private int CalculateFine(Loan late)
+        {
+            
+            int days = (int)(DateTime.Now - late.DateLoaned).TotalDays;
+
+            if (late.ItemLoaned.GetType() == typeof(Book))
+            {
+                return (days - 28);
+            }
+            else if (late.ItemLoaned.GetType() == typeof(Journal))
+            {
+                return (days - 14) * 3;
+            }
+            else
+            {
+                return (days - 7) * 5;
+            }
+
         }
 
     }
