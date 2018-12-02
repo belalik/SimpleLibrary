@@ -13,7 +13,7 @@ namespace Library
 
             Console.WriteLine("Welcome to our library");
 
-            Library aegeanLibrary = new Library();
+            Library aegeanLibrary = new Library(5);
             
             // Ας φτάξουμε μερικούς χρήστες
 
@@ -85,7 +85,91 @@ namespace Library
 
 
 
+            // Ας δανείσουμε μερικά Items σε Χρήστες (φτιάχνοντας τα αντίστοιχα Loan αντικείμενα - και περνώντας τα στην Λίστα Loans του aegeanLibrary). 
 
+            /*
+             *  Ο χρήστης user1 δανείζεται το Item book1, με ημερομηνία δανεισμού την 25η Νοεμβρίου 2018.
+             *  gia thn hmeromhn;ia, Χρησιμοποιώ την κλάση DateTime από τις βιβλιοθήκες της C#, 
+             *  και συγκεκριμένα τον constructor: public DateTime (int year, int month, int day).  
+             *  
+             *  Με άλλα λόγια, φτιάχνω και περνάω σαν παράμετρο
+             *  ένα νέο DateTime object, δίνοντας τιμές για έτος, μήνα και μέρα. 
+             *  
+             *  (Η DateTime έχει πολλούς διαθέσιμους constructors, περισσότερες πληροφορίες εδώ: 
+             *  
+             *  https://docs.microsoft.com/en-us/dotnet/api/system.datetime.-ctor?view=netframework-4.7.2
+             *  
+             */
+            aegeanLibrary.LoanItem(user1, book1, new DateTime(2018, 11, 25));
+
+            // Με την ίδια λογική, φτιάχνω ακόμα 4 "δανεισμούς" για τον χρήστη user1: 
+
+            aegeanLibrary.LoanItem(user1, book3, new DateTime(2018, 11, 12));
+            aegeanLibrary.LoanItem(user1, book4, new DateTime(2018, 10, 19));
+            aegeanLibrary.LoanItem(user1, video1, new DateTime(2018, 11, 20));
+
+            // Σε αυτό το αντικείμενο χρησιμοποιώ το (public) Property της DateTime 'Now' που κάθε φορά
+            // μου δίνει ένα αντικείμενο DateTime με ημερομηνία και ώρα "Now" - δηλαδή ορισμένο 
+            // για την στιγμή που τρέχει η εφαρμογή μου. 
+            aegeanLibrary.LoanItem(user1, video2, DateTime.Now);
+
+
+            // Εδώ θα προσπαθήσω να δανείσω άλλο ένα αντικείμενο (το Journal1) 
+            // στον χρήστη user1 - όμως ο δανεισμός δεν θα γίνει, και θα τυπωθεί 
+            // κατάλληλο μήνυμα λάθους γιατί ο χρήστης έχει ήδη συμπληρώσει το μέγιστο 
+            // αριθμό δανεισμένων αντικειμένων (έχει ήδη 5 loans). 
+
+            aegeanLibrary.LoanItem(user1, journal1, new DateTime(2018, 11, 29));
+
+            // Ο χρήστης user2 δανείζεται το book2 με ημερομηνία 18/11/2018
+            aegeanLibrary.LoanItem(user2, book2, new DateTime(2018, 11, 18));
+
+            // Ο χρήστης user2 προσπαθεί να δανειστεί το book1 αλλά δεν θα μπορέσει 
+            // (θα τυπωθεί κατάλληλο μήνυμα) γιατί το book1 το έχει ήδη πάρει ο χρήστης user1
+            // (το onLoan είναι true). 
+            aegeanLibrary.LoanItem(user2, book1, new DateTime(2018, 11, 21));
+
+            // Ο χρήστης user2 δανείζεται το journal5 με ημερομηνία 21/10/2018
+            aegeanLibrary.LoanItem(user2, journal1, new DateTime(2018, 10, 21));
+
+
+            // Είδαμε πιο πάνω πως ο user1 θέλει να πάρει το journal1 αλλά δεν μπορεί επειδή έχει 
+            // ήδη δανειστεί 5 Items.  Ας υποθέσουμε πως επιστρέφει το book1 που είχε πάρει. 
+            // Δοκιμάζω την μέθοδο Return που χειρίζεται τις επιστροφές. 
+            aegeanLibrary.Return(user1, book1);
+
+            // Για να δω τώρα αν μπορεί όντως να πάρει το journal1 που δοκίμασα και πιο πριν και δεν μπορούσε 
+            aegeanLibrary.LoanItem(user1, journal1, new DateTime(2018, 11, 29));
+
+            // *** Θα δω πως δεν μπορεί, γιατί το έχει ήδη πάρει ο χρήστης user2 !!! ***
+
+            // Ο χρήστης user2 επιστρέφει το journal1. 
+            aegeanLibrary.Return(user2, journal1);
+
+            // επιτέλους, ο χρήστης user1 θα πάρει το journal1 που τόσο ήθελε. 
+            aegeanLibrary.LoanItem(user1, journal1, new DateTime(2018, 11, 29));
+
+
+            // Μια τελευταία δοκιμή του Return, είναι να δοκιμάσει ένας χρήστης να επιστρέψει κάποιο Item 
+            // που δεν βρίσκεται στην κατοχή του. 
+            aegeanLibrary.Return(user3, journal1);
+
+            // Μια ακόμα δοκιμή είναι ένας χρήστης να δοκιμάσει να επιστρέψει κάτι που δεν είναι δανεισμένο
+            // από κανέναν
+            aegeanLibrary.Return(user1, video6);
+
+            // Ας τυπώσουμε όλα τα Items, κάθε φορά με άλλη μέθοδο και προσθέτοντας΄μια κενή γραμμή μεταξύ τους. 
+            Console.WriteLine();
+            aegeanLibrary.ShowAllItems();
+
+            Console.WriteLine();
+            aegeanLibrary.ShowAllItems2();
+
+            Console.WriteLine();
+            aegeanLibrary.ShowAllItems3();
+
+            Console.WriteLine();
+            aegeanLibrary.ShowAllItems4();
         }
 
     }

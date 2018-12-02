@@ -33,16 +33,6 @@ namespace Library
             UserID = staticUserID++;
         }
 
-        // κάθε φορά που ο χρήστης δανείζεται ένα αντικείμενο, πρόσθεσε 1 στο NumberOfItemsLoaned
-        public void LoanItem()
-        {
-            NumberOfItemsLoaned++;
-        }
-
-        // κάθε φορά που ο χρήστης επιστρέφει ένα εντικείμενο, αφαίρεσε 1 από το NumberOfItemsLoaned
-        public void ReturnItem()
-        {
-            NumberOfItemsLoaned--;
-        }
+        
     }
 }
